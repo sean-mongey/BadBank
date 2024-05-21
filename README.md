@@ -2,6 +2,10 @@
 
 This project is a part of the MIT xPro Professional Certificate in Coding: Full Stack Development with MERN. It is a web application called "Bad Bank" that simulates basic banking functionalities such as account creation, login, deposit, withdrawal, and transaction history viewing.
 
+## Live Demo
+
+Check out the live version of the app here: [Bad Bank App](https://sean-mongey-bad-bank.s3.us-east-2.amazonaws.com/index.html#/)
+
 ## Features
 
 ### 1. Account Creation
@@ -122,3 +126,17 @@ This guide will walk you through the process of uploading your bad-bank app to a
 
 ```sh
 aws s3 sync . s3://bad-bank-app-bucket/
+
+### Notes
+
+- Ensure all your files, especially `index.html`, are correctly uploaded to the S3 bucket.
+- If you make updates to your app, re-run the `aws s3 sync` command to upload the latest changes.
+
+## Contributors
+
+- Sean Mongey
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
