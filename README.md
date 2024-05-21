@@ -33,6 +33,12 @@ This project is a part of the MIT xPro Professional Certificate in Coding: Full 
 - **Styling**: Bootstrap CSS for styling components
 - **Date Handling**: JavaScript Date objects for timestamping transactions
 
+## Prerequisites
+
+1. **Node.js and npm**: Make sure Node.js and npm are installed on your machine. You can download and install them from [nodejs.org](https://nodejs.org/).
+2. **AWS Account**: Sign up for an AWS account at [aws.amazon.com](https://aws.amazon.com/).
+3. **AWS CLI**: Install the AWS Command Line Interface (CLI). Follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
+
 ## Setup Instructions
 
 1. Clone the repository to your local machine.
@@ -40,14 +46,79 @@ This project is a part of the MIT xPro Professional Certificate in Coding: Full 
 3. Run the application using `npm start`.
 4. Access the application in your web browser at `http://localhost:3000`.
 
-## Contributors
+## Uploading bad-bank App to Amazon S3
 
-- Sean Mongey
+This guide will walk you through the process of uploading your bad-bank app to an Amazon S3 bucket.
 
-## License
+### Steps
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. **Create an S3 Bucket**
 
----
+   - Sign in to the [AWS Management Console](https://aws.amazon.com/console/).
+   - Navigate to the **S3** service.
+   - Click on **Create bucket**.
+   - Enter a unique bucket name (e.g., `bad-bank-app-bucket`).
+   - Choose the AWS Region closest to your users.
+   - Keep the default settings or configure them as per your requirements.
+   - Click on **Create bucket**.
 
-Feel free to modify and extend the application as needed. If you have any questions or suggestions, please contact Sean Mongey.
+2. **Configure the Bucket for Static Website Hosting**
+
+   - Go to the bucket you just created.
+   - Click on the **Properties** tab.
+   - Scroll down to the **Static website hosting** section.
+   - Choose **Enable**.
+   - For the **Index document**, enter `index.html`.
+   - For the **Error document**, enter `error.html` (if you have one).
+   - Note the **Bucket website endpoint** URL; this will be the URL for your app.
+   - Click **Save changes**.
+
+3. **Set Bucket Permissions**
+
+   - Click on the **Permissions** tab of your bucket.
+   - In the **Bucket Policy** section, click on **Edit**.
+   - Add the following bucket policy to allow public read access to your bucket:
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Principal": "*",
+           "Action": "s3:GetObject",
+           "Resource": "arn:aws:s3:::bad-bank-app-bucket/*"
+         }
+       ]
+     }
+     ```
+   - Replace `bad-bank-app-bucket` with your bucket name.
+   - Click **Save changes**.
+
+4. **Install AWS CLI and Configure It**
+
+   - Open your terminal or command prompt.
+   - Run the following command to configure the AWS CLI with your credentials:
+     ```sh
+     aws configure
+     ```
+   - Enter your AWS Access Key ID, Secret Access Key, default region name, and default output format (e.g., `json`) when prompted.
+
+5. **Upload Your App to S3**
+
+   - Navigate to the directory containing your bad-bank app files.
+   - Run the following command to sync your local files to the S3 bucket:
+     ```sh
+     aws s3 sync . s3://bad-bank-app-bucket/
+     ```
+   - Replace `bad-bank-app-bucket` with your bucket name.
+
+6. **Access Your App**
+
+   - Open a web browser.
+   - Navigate to the **Bucket website endpoint** URL you noted earlier.
+   - Your bad-bank app should now be live and accessible.
+
+### Example
+
+```sh
+aws s3 sync . s3://bad-bank-app-bucket/
