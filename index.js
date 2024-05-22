@@ -1,4 +1,27 @@
+const Login = window.Login;
+
 function Spa() {
+  const { useState } = React;
+  const { HashRouter, Route, useHistory, useLocation } = ReactRouterDOM;
+
+  const [activeKey, setActiveKey] = useState(window.location.pathname);
+
+  const handleSelect = (selectedKey) => {
+    setActiveKey(selectedKey);
+  };
+
+  const NavBarWithRouter = () => {
+    const history = useHistory();
+    // const location = useLocation();
+
+    return (
+      <NavBar
+        activeKey={activeKey}
+        onSelect={handleSelect}
+      />
+    );
+  };
+
   return (
     <HashRouter>
       <NavBar />
