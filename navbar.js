@@ -1,9 +1,6 @@
-// const { useContext } = React;
-// const { NavLink } = ReactRouterDOM;
-
 function NavBar() {
   const { Navbar, Nav } = ReactBootstrap;
-  const {useLocation} = ReactRouterDOM;
+  const { useLocation } = ReactRouterDOM;
   const location = useLocation();
   const activeKey = `#${location.pathname}`;
 
@@ -12,10 +9,7 @@ function NavBar() {
       <Navbar.Brand href="#">BadBank</Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarNav" />
       <Navbar.Collapse id="navbarNav">
-        <Nav className="mr-auto" 
-          activeKey={activeKey}
-        
-          >
+        <Nav className="mr-auto" activeKey={activeKey}>
           <Nav.Link href="#/CreateAccount/">Create Account</Nav.Link>
           <Nav.Link href="#/login/">Login</Nav.Link>
           <Nav.Link href="#/deposit/">Deposit</Nav.Link>

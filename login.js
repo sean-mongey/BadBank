@@ -1,5 +1,5 @@
-const Login = ({setActiveKey}) => {
-  const currentUserCtx = React.useContext(currentUserContext);
+const Login = ({ setActiveKey }) => {
+  const currentUser = React.useContext(currentUserContext);
   const ctx = React.useContext(UserContext);
   const [show, setShow] = React.useState(true);
   const [email, setEmail] = React.useState("");
@@ -41,16 +41,16 @@ const Login = ({setActiveKey}) => {
     index,
     loginStatus
   ) => {
-    currentUserCtx.name = name;
-    currentUserCtx.email = email;
-    currentUserCtx.password = password;
-    currentUserCtx.balance = balance;
-    currentUserCtx.index = index;
-    currentUserCtx.loginStatus = loginStatus;
+    currentUser.name = name;
+    currentUser.email = email;
+    currentUser.password = password;
+    currentUser.balance = balance;
+    currentUser.index = index;
+    currentUser.loginStatus = loginStatus;
   };
 
   // Function to handle login process
-  const login = () => {
+  const userLogin = () => {
     const user = getUser();
     if (user.length > 0) {
       if (Object.keys(user[1]).length > 0) {
@@ -92,7 +92,7 @@ const Login = ({setActiveKey}) => {
   // Function to handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    login();
+    userLogin();
   };
 
   const forgottenPassword = (e) => {
@@ -113,18 +113,18 @@ const Login = ({setActiveKey}) => {
   // Navigate to the deposit page
   const handleDepositButtonClick = () => {
     history.push("/deposit");
-    handleSelect("/deposit")
+    handleSelect("/deposit");
   };
 
   // Navigate to the withdraw page
   const handleWithdrawButtonClick = () => {
     history.push("/withdraw");
-    handleSelect("/withdraw")
+    handleSelect("/withdraw");
   };
   // Navigate to the withdraw page
   const handleTransactionHistoryButtonClick = () => {
     history.push("/transactionHistory");
-    handleSelect("/transactionHistory")
+    handleSelect("/transactionHistory");
   };
 
   // Effect hook to focus on logout button after successful logout
@@ -149,130 +149,159 @@ const Login = ({setActiveKey}) => {
 
   return (
     <div>
-    <Card style={{height: "100vh", width: "90vw", margin: "auto" }} bg="info" text="white">
-      <Card.Header>
-        <h2>
-          {currentUserCtx.loginStatus
-            ? `Welcome ${currentUserCtx.name}`
-            : "Login"}
-        </h2>
-     
-      </Card.Header>
-      <Card.Body>
-        {currentUserCtx.loginStatus ? (
-          <div>
-               <h4>What would you like to do today</h4>
-            <Row>
-              <Col className xs={9}>
-                <ButtonToolbar justify="between">
+      <Card
+        style={{ height: "100vh", width: "90vw", margin: "auto" }}
+        bg="info"
+        text="white"
+      >
+        <Card.Header>
+          <h2>
+            {currentUser.loginStatus ? `Welcome ${currentUser.name}` : "Login"}
+          </h2>
+        </Card.Header>
+        <Card.Body>
+          {currentUser.loginStatus ? (
+            <div>
+              <h4>What would you like to do today</h4>
+              <Row>
+                <Col className xs={9}>
+                  <ButtonToolbar justify="between">
+                    <Button
+                      className="mr-2 mb-2"
+                      ref={depositButtonRef}
+                      variant="light"
+                      onClick={handleDepositButtonClick}
+                      type="button"
+                    >
+                      Deposit
+                    </Button>
 
-                  <Button
-                  className="mr-2 mb-2"
-                    ref={depositButtonRef}
-                    variant="light"
-                    onClick={handleDepositButtonClick}
-                    type="button"
-                  >
-                    Deposit
-                  </Button>
+                    <Button
+                      className="mr-2 mb-2"
+                      ref={withdrawButtonRef}
+                      variant="light"
+                      onClick={handleWithdrawButtonClick}
+                      type="button"
+                    >
+                      Withdraw
+                    </Button>
 
-                  <Button
-                  className="mr-2 mb-2"
-                    ref={withdrawButtonRef}
-                    variant="light"
-                    onClick={handleWithdrawButtonClick}
-                    type="button"
-                  >
-                    Withdraw
-                  </Button>
-
-                  <Button
-                  className="mr-2 mb-2"
-                    ref={transactionHistoryButtonRef}
-                    variant="light"
-                    onClick={handleTransactionHistoryButtonClick}
-                    type="button"
-                  >
-                    Transaction History
-                  </Button>
-                 
+                    <Button
+                      className="mr-2 mb-2"
+                      ref={transactionHistoryButtonRef}
+                      variant="light"
+                      onClick={handleTransactionHistoryButtonClick}
+                      type="button"
+                    >
+                      Transaction History
+                    </Button>
                   </ButtonToolbar>
-              </Col>
-              <Col className="text-right" xs={3}>
-                <Button
-                  ref={logoutButtonRef}
-                  variant="light"
-                  onClick={handleLogout}
-                  type="button"
-                >
-                  Logout
-                </Button>
-              </Col>
-            </Row>
+                </Col>
+                <Col className="text-right" xs={3}>
+                  <Button
+                    ref={logoutButtonRef}
+                    variant="light"
+                    onClick={handleLogout}
+                    type="button"
+                  >
+                    Logout
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          ) : (
+            <Form onSubmit={handleSubmit}>
+              <Form.Group controlId="formBasicEmail">
+                <Form.Control
+                  ref={emailInputRef}
+                  type="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.currentTarget.value)}
+                />
+              </Form.Group>
+              <br />
+              <Form.Group controlId="formBasicPassword">
+                <Form.Control
+                  ref={passwordInputRef}
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.currentTarget.value)}
+                />
+              </Form.Group>
+              <br />
+              <Row>
+                <Col xs={6}>
+                  <Button variant="light" type="submit" ref={continueButtonRef}>
+                    Login
+                  </Button>
+                </Col>
+                <Col xs={6} className="text-right">
+                  <Button
+                    variant="light"
+                    type="button"
+                    onClick={forgottenPassword}
+                  >
+                    Forgot email/password
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          )}
+        </Card.Body>
+      </Card>
+      <footer
+        style={{
+          position: "fixed",
+          bottom: 0,
+          width: "100%",
+          background: "dimGrey",
+          color: "white",
+        }}
+      >
+        <div className="d-flex justify-content-evenly">
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+            <a
+              href="http://www.linkedin.com/in/sean-mongey"
+              style={{ color: "white" }}
+            >
+              <img
+                src="linkedin.png"
+                alt="LinkedIn"
+                style={{ maxWidth: "40px", maxHeight: "40px" }}
+              />
+              Sean Mongey
+            </a>
           </div>
-        ) : (
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control
-                ref={emailInputRef}
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.currentTarget.value)}
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+            <a
+              href="https://github.com/sean-mongey?tab=repositories"
+              style={{ color: "white" }}
+            >
+              <img
+                src="github.png"
+                alt="GitHub"
+                style={{ maxWidth: "50px", maxHeight: "50px" }}
               />
-            </Form.Group>
-            <br />
-            <Form.Group controlId="formBasicPassword">
-              <Form.Control
-                ref={passwordInputRef}
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.currentTarget.value)}
-              />
-            </Form.Group>
-            <br />
-            <Row>
-              <Col xs={6}>
-                <Button variant="light" type="submit" ref={continueButtonRef}>
-                  Login
-                </Button>
-              </Col>
-              <Col xs={6} className="text-right">
-                <Button
-                  variant="light"
-                  type="button"
-                  onClick={forgottenPassword}
-                >
-                  Forgot email/password
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        )}
-      </Card.Body>
-    </Card>
-    <footer style={{ position: "fixed", bottom: 0, width: "100%", background: "dimGrey", color: "white" }}>
-  <div className="d-flex justify-content-evenly">
-    <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-      <a href="http://www.linkedin.com/in/sean-mongey" style={{color:"white"}}>
-        <img src="linkedin.png" alt="LinkedIn" style={{ maxWidth: "40px", maxHeight: "40px" }} />
-        Sean Mongey
-      </a>
+              sean-mongey.github.io
+            </a>
+          </div>
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+            Bad Bank
+            <img
+              src="bank.png"
+              alt="Bank Logo"
+              style={{
+                maxWidth: "30px",
+                maxHeight: "30px",
+                marginLeft: "10px",
+              }}
+            />
+          </div>
+        </div>
+      </footer>
     </div>
-    <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-      <a href="https://github.com/sean-mongey?tab=repositories" style={{color:"white"}}>
-        <img src="github.png" alt="GitHub" style={{ maxWidth: "50px", maxHeight: "50px" }} />
-        sean-mongey.github.io
-      </a>
-    </div>
-    <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-      Bad Bank
-      <img src="bank.png" alt="Bank Logo" style={{ maxWidth: "30px", maxHeight: "30px", marginLeft: "10px" }} />
-    </div>
-  </div>
-</footer>
-</div>  
   );
 };
 window.Login = Login;
