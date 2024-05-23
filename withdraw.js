@@ -15,10 +15,8 @@ const Withdraw = () => {
     return ctx.users[currentUser.index].balance;
   };
 
-  const displayBalance = () => {
-    const balance = getBalance();
-    return balance.toLocaleString();
-  };
+  const displayBalance = () => getBalance().toLocaleString();
+
 
   const displayAmount = () => {
     const formattedAmount = Number(withdrawAmount);
@@ -56,8 +54,13 @@ const Withdraw = () => {
   };
 
   const sufficientFunds = (withdrawAmount, userBalance) => {
+    if (!validNumber(withdrawAmount)) {
+      return true; // Skip validation for non-number inputs
+    }
+  
     return Number(withdrawAmount) <= userBalance;
   };
+  
 
   const validateWithdrawal = () =>
     withdrawAmount.trim() !== "" &&
