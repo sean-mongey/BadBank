@@ -1,93 +1,81 @@
 const Withdraw = () => {
-  const ctx = React.useContext(UserContext);
   const currentUser = React.useContext(currentUserContext);
-    const [isValid, setisValid] = React.useState(false);
-  const [isWithdrawalSuccessful, setisWithdrawalSuccessful] =
-    React.useState(false);
-  const [warningMsg, setWarningMsg] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const continueButtonRef = React.useRef(null);
-  const inputRef = React.useRef(null);
+  const ctx = React.useContext(UserContext);
+
+  const [showWithdrawForm, setShowWithdrawForm] = React.useState(true);
+  const [withdrawAmount, setWithdrawAmount] = React.useState("");
+  const [withdrawFormValid, setWithdrawFormValid] = React.useState(false);
+
   const { Card, Button, Form } = ReactBootstrap;
 
-  //   Retrieves the balance of the current user
+  const continueButtonRef = React.useRef(null);
+  const withdrawInputRef = React.useRef(null);
+
   const getBalance = () => {
     return ctx.users[currentUser.index].balance;
   };
-  //Formats balance using the
+
   const displayBalance = () => {
     const balance = getBalance();
     return balance.toLocaleString();
   };
-  // Formats the amount using the user's local settings for display purposes
+
   const displayAmount = () => {
-    const formattedAmount = Number(amount);
+    const formattedAmount = Number(withdrawAmount);
     return formattedAmount.toLocaleString();
   };
+
   const getDate = () => {
     return new Date().toString();
   };
-  // Handles the withdraw action
+
   const handleWithdrawal = () => {
     const user = ctx.users[currentUser.index];
-    user.balance -= amount;
+    user.balance -= withdrawAmount;
     user.accountHistory.push(
       `${getDate()} - Withdrawal of $${displayAmount()}`
     );
-    setAmount("");
-    setisWithdrawalSuccessful(true);
+    setWithdrawAmount("");
+    setShowWithdrawForm(false);
   };
 
-  const handleOk = () => {
-    setisWithdrawalSuccessful(false);
+  const continueWithdrawal = () => {
+    setShowWithdrawForm(true);
+    setWithdrawAmount("");
   };
 
-  function checkInputParams(inputParm) {
-    if (inputParm === "" || inputParm <= 0 || isNaN(inputParm)) {
-      setWarningMsg("Please enter a valid number greater than 0.");
-      return false;
-    } else if (inputParm > getBalance()) {
-      setWarningMsg("Insufficient Funds");
-      return false;
-    } else {
-      setWarningMsg("");
-      return true;
+  const validNumber = (withdrawAmount) => /^\d*\.?\d+$/.test(withdrawAmount);
+
+  const aboveZero = (withdrawAmount) => {
+    if (!validNumber(withdrawAmount)) {
+      return true; // Skip validation for non-number inputs
     }
-  }
 
-  const handleChange = (e) => {
-    const inputValue = e.target.value;
-    setAmount(inputValue);
-    if (!isNaN(inputValue) || inputValue === "") {
-      if (!checkInputParams(inputValue)) {
-        setisValid(false);
-      } else {
-        setisValid(true);
-      }
-    } else {
-      setWarningMsg("Please enter a valid number");
-      setisValid(false);
-    }
+    const numericAmount = Number(withdrawAmount);
+    return numericAmount > 0;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isValid) {
-      handleWithdrawal();
-    }
+  const sufficientFunds = (withdrawAmount, userBalance) => {
+    return Number(withdrawAmount) <= userBalance;
   };
+
+  const validateWithdrawal = () =>
+    withdrawAmount.trim() !== "" &&
+    validNumber(withdrawAmount) &&
+    aboveZero(withdrawAmount) &&
+    sufficientFunds(withdrawAmount, getBalance());
 
   React.useEffect(() => {
-    if (inputRef.current && !isWithdrawalSuccessful) {
-      inputRef.current.focus();
-    } else if (continueButtonRef.current && isWithdrawalSuccessful) {
-      continueButtonRef.current.focus();
-    }
-  }, [isWithdrawalSuccessful]);
+    setWithdrawFormValid(validateWithdrawal());
+  }, [withdrawAmount]);
 
-  const handleErrorMessageEnter = () => {
-    setWarningMsg("");
-  };
+  React.useEffect(() => {
+    if (showWithdrawForm) {
+      withdrawInputRef.current && withdrawInputRef.current.focus();
+    } else {
+      continueButtonRef.current && continueButtonRef.current.focus();
+    }
+  }, [showWithdrawForm]);
 
   return (
     <div>
@@ -96,56 +84,58 @@ const Withdraw = () => {
         bg="info"
         text="white"
       >
-        <Card.Header>Withdraw Money</Card.Header>
+        <Card.Title>Withdraw Money</Card.Title>
         <Card.Body>
           {currentUser.loginStatus ? (
-            isWithdrawalSuccessful ? (
+            showWithdrawForm ? (
+              <Form>
+                <h1>Balance: ${displayBalance()}</h1>
+                <Form.Group controlId="formAmount">
+                  <Form.Label>Amount</Form.Label>
+                  <Form.Control
+                    ref={withdrawInputRef}
+                    onChange={(e) => setWithdrawAmount(e.target.value)}
+                    value={withdrawAmount}
+                    type="text"
+                    id="amount"
+                    placeholder="Enter Amount"
+                  />
+                  {withdrawAmount === "" && <p>Please enter an amount</p>}
+                  {withdrawAmount && !validNumber(withdrawAmount) && (
+                    <p>Please enter a valid number</p>
+                  )}
+                  {withdrawAmount && !aboveZero(withdrawAmount) && (
+                    <p>Amount must be greater than zero</p>
+                  )}
+                  {withdrawAmount &&
+                    !sufficientFunds(withdrawAmount, getBalance()) && (
+                      <p>Insufficient funds</p>
+                    )}
+                </Form.Group>
+                <br />
+
+                <Button
+                  disabled={!withdrawFormValid}
+                  variant="light"
+                  type="submit"
+                  onClick={handleWithdrawal}
+                >
+                  Withdraw
+                </Button>
+              </Form>
+            ) : (
               <>
                 <h2>Withdrawal Successful</h2>
                 <br />
                 <h2>New Balance ${displayBalance()}</h2>
                 <Button
                   ref={continueButtonRef}
-                  onClick={handleOk}
+                  onClick={continueWithdrawal}
                   variant="light"
                   type="button"
                 >
                   Continue...
                 </Button>
-                <h2></h2>
-              </>
-            ) : (
-              <>
-                <Form onSubmit={handleSubmit}>
-                  <br />
-                  <div>
-                    <h1>Balance: ${displayBalance()}</h1>
-                  </div>
-                  <br />
-                  <div>
-                    <Form.Control
-                      ref={inputRef}
-                      onChange={handleChange}
-                      value={amount}
-                      type="text"
-                      id="amount"
-                      placeholder="Withdrawal Amount..."
-                    />
-                    {warningMsg && (
-                      <p onClick={handleErrorMessageEnter}>{warningMsg}</p>
-                    )}
-                  </div>
-                  <br />
-                  <div>
-                    <Button
-                      disabled={!isValid || amount.trim() === ""}
-                      variant="light"
-                      type="submit"
-                    >
-                      Withdraw
-                    </Button>
-                  </div>
-                </Form>
               </>
             )
           ) : (

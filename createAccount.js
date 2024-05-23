@@ -5,18 +5,16 @@ const CreateAccount = () => {
   const ctx = React.useContext(UserContext);
   const currentUser = React.useContext(currentUserContext);
 
-  const [show, setShow] = React.useState(true);
-  const [status, setStatus] = React.useState("");
+  const [showCreateForm, setShowCreateForm] = React.useState(true);
   const [name, setName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [formValid, setFormValid] = React.useState(false);
+  const [createFormValid, setCreateFormValid] = React.useState(false);
 
   const { Card, Button, Form, Row, Col } = ReactBootstrap;
 
   const nameRef = React.useRef(null);
-  const emailRef = React.useRef(null);
-  const passwordRef = React.useRef(null);
+
   const createButtonRef = React.useRef(null);
   const loginButtonRef = React.useRef(null);
   const createAnotherButtonRef = React.useRef(null);
@@ -26,7 +24,6 @@ const CreateAccount = () => {
       .split(" ")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
-
 
   const logoutCurrentUser = (
     name,
@@ -44,65 +41,67 @@ const CreateAccount = () => {
     currentUser.loginStatus = loginStatus;
   };
 
-  const clearForm = () => {
+  const clearCreateForm = () => {
     setName("");
     setEmail("");
     setPassword("");
-    setShow(true);
+    setShowCreateForm(true);
     nameRef.current && nameRef.current.focus();
   };
-  
+
   const handleCreate = () => {
-   const capitalisedName = capitalise(name);
+    const capitalisedName = capitalise(name);
     // Check if email already exists
     if (ctx.users.some((user) => user.email === email)) {
       alert(
         "Error: This email address is already linked to an existing account. Please enter a new email address, or navigate to the login page"
       );
-      clearForm();
+      clearCreateForm();
       return;
-    };
-      // Push new user to context
+    }
+    // Push new user to context
     ctx.users.push({
-      name:capitalisedName,
+      name: capitalisedName,
       email,
       password,
       balance: 0,
       accountHistory: [],
     });
-  
+
     // Reset form and update current user
-    setShow(false);
+    setShowCreateForm(false);
     logoutCurrentUser("", "", "", 0, 0, false);
   };
-  
 
   const handleLoginButtonClick = () => {
     history.push("/login");
   };
 
-  
-
   const validateName = (name) => /^[A-Za-z\s]+$/.test(name);
-  
+
   const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   const validatePassword = (password) => password.length >= 8;
-  
-  const validateForm = () =>
-    name.trim() !== "" && validateName(name) && email.trim() !== "" && validateEmail(email) && password.trim() !== "" && validatePassword(password);
+
+  const validateCreate = () =>
+    name.trim() !== "" &&
+    validateName(name) &&
+    email.trim() !== "" &&
+    validateEmail(email) &&
+    password.trim() !== "" &&
+    validatePassword(password);
 
   React.useEffect(() => {
-    setFormValid(validateForm());
+    setCreateFormValid(validateCreate());
   }, [name, email, password]);
 
   React.useEffect(() => {
-    if (show) {
+    if (showCreateForm) {
       nameRef.current && nameRef.current.focus();
     } else {
       loginButtonRef.current && loginButtonRef.current.focus();
     }
-  }, [show]);
+  }, [showCreateForm]);
 
   return (
     <div>
@@ -113,7 +112,7 @@ const CreateAccount = () => {
       >
         <Card.Body>
           <Card.Title>Create Account</Card.Title>
-          {show ? (
+          {showCreateForm ? (
             <Form>
               <Form.Group controlId="formName">
                 <Form.Label>Name</Form.Label>
@@ -125,7 +124,7 @@ const CreateAccount = () => {
                   ref={nameRef}
                 />
                 {name === "" && <p>Please enter your name</p>}
-                {name &&  !validateName(name) && (
+                {name && !validateName(name) && (
                   <p>Name cannot contain numbers or special characters</p>
                 )}
               </Form.Group>
@@ -136,7 +135,6 @@ const CreateAccount = () => {
                   placeholder="Enter Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  ref={emailRef}
                 />
                 {email === "" && <p>Please enter your email</p>}
                 {email && !validateEmail(email) && (
@@ -150,7 +148,6 @@ const CreateAccount = () => {
                   placeholder="Enter Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  ref={passwordRef}
                 />
                 {password === "" && <p>Please enter a password</p>}
                 {password && !validatePassword(password) && (
@@ -163,7 +160,7 @@ const CreateAccount = () => {
                 variant="light"
                 type="submit"
                 onClick={handleCreate}
-                disabled={!formValid}
+                disabled={!createFormValid}
                 ref={createButtonRef}
               >
                 Create Account
@@ -186,7 +183,7 @@ const CreateAccount = () => {
                 <Col xs={6} className="mb-2 text-right">
                   <Button
                     variant="light"
-                    onClick={clearForm}
+                    onClick={clearCreateForm}
                     ref={createAnotherButtonRef}
                   >
                     Create Another Account
@@ -195,7 +192,6 @@ const CreateAccount = () => {
               </Row>
             </Form>
           )}
-          {status && <p>{status}</p>}
         </Card.Body>
       </Card>
 

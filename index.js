@@ -33,7 +33,7 @@ function Spa() {
               name: "2",
               email: "2@2.2",
               password: "2",
-              balance: 2,
+              balance: 222,
               accountHistory: [],
             },
           ],

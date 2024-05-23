@@ -2,97 +2,62 @@ const Deposit = () => {
   const currentUser = React.useContext(currentUserContext);
   const ctx = React.useContext(UserContext);
 
-  const [isValid, setisValid] = React.useState(false);
-  const [isDepositSuccessful, setisDepositSuccessful] = React.useState(false);
-  const [warningMsg, setWarningMsg] = React.useState("");
-  const [amount, setAmount] = React.useState("");
-  const continueButtonRef = React.useRef(null);
-  const inputRef = React.useRef(null);
+  const [showDepositForm, setShowDepositForm] = React.useState(true);
+  const [depositAmount, setDepositAmount] = React.useState("");
+  const [depositFormValid, setDepositFormValid] = React.useState(false);
+ 
   const { Card, Button, Form } = ReactBootstrap;
 
-  // Displays the user's balance and formats the number based on the user's local settings.
-  //   Retrieves the balance of the current user
-  const getBalance = () => {
-    return ctx.users[currentUser.index].balance;
-  };
-  //Formats balance using the user's local settings (100,000,000)
-  //For display purposes only, to not interfere with validation
-  const displayBalance = () => {
-    const balance = getBalance();
-    return balance.toLocaleString();
-  };
-  // Formats the amount using the user's local settings for display purposes
-  const displayAmount = () => {
-    const formattedAmount = Number(amount);
-    return formattedAmount.toLocaleString();
-  };
-  //   Returns the current date and time as a string
-  const getDate = () => {
-    return new Date().toString();
-  };
-  //  Handles the deposit action
+  const continueButtonRef = React.useRef(null);
+  const depositInputRef = React.useRef(null);
+
+  const getBalance = () => ctx.users[currentUser.index].balance;
+
+  const displayBalance = () => getBalance().toLocaleString();
+
+  const displayAmount = () => Number(depositAmount).toLocaleString();
+
+  const getDate = () => new Date().toString();
+
   const handleDeposit = () => {
     const user = ctx.users[currentUser.index];
-    user.balance += Number(amount);
+    user.balance += Number(depositAmount);
     user.accountHistory.push(`${getDate()} - Deposit of $${displayAmount()}`);
-    setAmount("");
-    setisDepositSuccessful(true);
+    setDepositAmount("");
+    setShowDepositForm(false);
   };
 
-  // Handles the "OK" button click event after a successful deposit to reset deposit status
-  const handleOk = () => {
-    setisDepositSuccessful(false);
-    setAmount("");
+  const continueDeposit = () => {
+    setShowDepositForm(true);
+    setDepositAmount("");
   };
 
-  // Validates the input parameters for deposit amount
-  const checkInputParams = (inputParm) => {
-    if (inputParm === "" || inputParm <= 0 || isNaN(inputParm)) {
-      setWarningMsg("Please enter a number greater than 0.");
-      return false;
-    } else {
-      setWarningMsg("");
-      return true;
+  const validNumber = (depositAmount) => /^\d*\.?\d+$/.test(depositAmount);
+
+  const aboveZero = (depositAmount) => {
+    if (!validNumber(depositAmount)) {
+      return true; // Skip validation for non-number inputs
     }
+  
+    const numericAmount = Number(depositAmount);
+    return numericAmount > 0;
   };
+  
 
-  // Handles the change event of the deposit amount input field
-  const handleChange = (e) => {
-    const inputValue = e.target.value;
-    setAmount(inputValue);
-    if (!isNaN(inputValue) || inputValue === "") {
-      if (!checkInputParams(inputValue)) {
-        setisValid(false);
-      } else {
-        setisValid(true);
-      }
-    } else {
-      setWarningMsg("Please enter a valid number");
-      setisValid(false);
-    }
-  };
+  const validateDeposit = () =>
+    depositAmount.trim() !== "" && validNumber(depositAmount) && aboveZero(depositAmount);
 
-  // Handles the form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isValid) {
-      handleDeposit();
-    }
-  };
-
-  // Sets focus on the input field or the continue button based on the deposit status
   React.useEffect(() => {
-    if (inputRef.current && !isDepositSuccessful) {
-      inputRef.current.focus();
-    } else if (continueButtonRef.current && isDepositSuccessful) {
-      continueButtonRef.current.focus();
-    }
-  }, [isDepositSuccessful]);
+    setDepositFormValid(validateDeposit());
+  }, [depositAmount]);
 
-  // Clears the warning message when user enters the input field
-  const handleErrorMessageEnter = () => {
-    setWarningMsg(""); // Clear the error message
-  };
+  React.useEffect(() => {
+    if (showDepositForm) {
+      depositInputRef.current && depositInputRef.current.focus();
+    } else {
+      continueButtonRef.current && continueButtonRef.current.focus();
+    }
+  }, [showDepositForm]);
 
   return (
     <div>
@@ -101,56 +66,52 @@ const Deposit = () => {
         bg="info"
         text="white"
       >
-        <Card.Header>Deposit Money</Card.Header>
+        <Card.Title>Deposit Money</Card.Title>
         <Card.Body>
           {currentUser.loginStatus ? (
-            isDepositSuccessful ? (
+            showDepositForm ? (
+              <Form>
+                  <h1>Balance: ${displayBalance()}</h1>
+          <Form.Group controlId="formAmount">
+  <Form.Label>Amount</Form.Label>
+  <Form.Control
+    ref={depositInputRef}
+    onChange={(e) => setDepositAmount(e.target.value)}
+    value={depositAmount}
+    type="text"
+    id="amount"
+    placeholder="Enter Amount"
+  />
+  {depositAmount === "" && <p>Please enter an amount</p>}
+  {depositAmount && !aboveZero(depositAmount) && <p>Amount must be greater than zero</p>}
+  {depositAmount && !validNumber(depositAmount) && <p>Please enter a valid number</p>}
+
+</Form.Group>
+
+                <br />
+
+                <Button
+                  disabled={!depositFormValid}
+                  variant="light"
+                  type="submit"
+                  onClick={handleDeposit}
+                >
+                  Deposit
+                </Button>
+              </Form>
+            ) : (
               <>
                 <h2>Deposit Successful</h2>
                 <br />
                 <h2>New Balance ${displayBalance()}</h2>
                 <Button
                   ref={continueButtonRef}
-                  onClick={handleOk}
+                  onClick={continueDeposit}
                   variant="light"
                   type="button"
                 >
                   Continue...
                 </Button>
-                <h2></h2>
-              </>
-            ) : (
-              <>
-                <Form onSubmit={handleSubmit}>
-                  <br />
-                  <div>
-                    <h1>Balance: ${displayBalance()}</h1>
-                  </div>
-                  <br />
-                  <div>
-                    <Form.Control
-                      ref={inputRef}
-                      onChange={handleChange}
-                      value={amount}
-                      type="text"
-                      id="amount"
-                      placeholder="Deposit Amount..."
-                    />
-                    {warningMsg && (
-                      <p onClick={handleErrorMessageEnter}>{warningMsg}</p>
-                    )}
-                  </div>
-                  <br />
-                  <div>
-                    <Button
-                      disabled={!isValid || amount.trim() === ""}
-                      variant="light"
-                      type="submit"
-                    >
-                      Deposit
-                    </Button>
-                  </div>
-                </Form>
               </>
             )
           ) : (
