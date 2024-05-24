@@ -1,25 +1,20 @@
-const Login = ({ setActiveKey }) => {
+const Login = () => {
   const currentUser = React.useContext(currentUserContext);
   const ctx = React.useContext(UserContext);
-  const [show, setShow] = React.useState(true);
+
+  const [showLoginForm, setShowLoginForm] = React.useState(
+    !currentUser.loginStatus
+  );
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [isLoginSuccessful, setIsLoginSuccessful] = React.useState(false);
-  const [isLogoutSuccessful, setIsLogoutSuccessful] = React.useState(false);
-  const { Card, Button, ButtonToolbar, Form, Row, Col } = ReactBootstrap;
-  const continueButtonRef = React.useRef(null);
+  const [loginFormValid, setLoginFormValid] = React.useState(false);
+
+  const { Card, Button, Form, Row, Col } = ReactBootstrap;
+
   const emailInputRef = React.useRef(null);
-  const passwordInputRef = React.useRef(null);
+  const loginButtonRef = React.useRef(null);
   const logoutButtonRef = React.useRef(null);
-  const depositButtonRef = React.useRef(null);
-  const withdrawButtonRef = React.useRef(null);
-  const transactionHistoryButtonRef = React.useRef(null);
-  // const [activeKey, setActiveKey] = React.useState(window.location.pathname);
 
-  const { useHistory } = ReactRouterDOM;
-  const history = useHistory();
-
-  // Function to find user based on entered email and password
   const getUser = () => {
     const users = ctx.users;
     for (const [index, user] of Object.entries(users)) {
@@ -32,7 +27,6 @@ const Login = ({ setActiveKey }) => {
     return {};
   };
 
-  // Function to update current user context with logged-in user details
   const updateCurrentUser = (
     name,
     email,
@@ -49,7 +43,6 @@ const Login = ({ setActiveKey }) => {
     currentUser.loginStatus = loginStatus;
   };
 
-  // Function to handle login process
   const userLogin = () => {
     const user = getUser();
     if (user.length > 0) {
@@ -62,8 +55,8 @@ const Login = ({ setActiveKey }) => {
           user[0],
           true
         );
-        setShow(false);
-        setIsLoginSuccessful(true);
+        setShowLoginForm(false);
+        setLoginFormValid(true);
       } else {
         updateCurrentUser("", "", "", 0, 0, false);
       }
@@ -71,28 +64,19 @@ const Login = ({ setActiveKey }) => {
       alert(
         "Please check that your email and password have been entered correctly"
       );
-      setIsLoginSuccessful(false);
+      setLoginFormValid(false);
     }
   };
 
-  // Function to clear login form
   const clearForm = () => {
     setEmail("");
     setPassword("");
-    setShow(true);
+    setShowLoginForm(true);
   };
 
-  // Function to handle logout process
   const handleLogout = () => {
     updateCurrentUser("", "", "", 0, 0, false);
     clearForm();
-    setIsLogoutSuccessful(true);
-  };
-
-  // Function to handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    userLogin();
   };
 
   const forgottenPassword = (e) => {
@@ -103,127 +87,59 @@ const Login = ({ setActiveKey }) => {
     alert(
       "We are keeping all the money until you get your s#*@ together and remember your details."
     );
-    alert("Surley you wrote them down somewhere...");
+    alert("Surely you wrote them down somewhere...");
     alert("Maybe check under the bed...?");
   };
 
-  const handleSelect = (selectedKey) => {
-    setActiveKey(selectedKey);
-  };
-  // Navigate to the deposit page
-  const handleDepositButtonClick = () => {
-    history.push("/deposit");
-    handleSelect("/deposit");
+  const handleLogin = (e) => {
+    e.preventDefault();
+    userLogin();
   };
 
-  // Navigate to the withdraw page
-  const handleWithdrawButtonClick = () => {
-    history.push("/withdraw");
-    handleSelect("/withdraw");
-  };
-  // Navigate to the withdraw page
-  const handleTransactionHistoryButtonClick = () => {
-    history.push("/transactionHistory");
-    handleSelect("/transactionHistory");
-  };
+  const validateLoginEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  // Effect hook to focus on logout button after successful logout
+  const validateLogin = () =>
+    email.trim() !== "" && password.trim() !== "" && validateLoginEmail(email);
+
   React.useEffect(() => {
-    if (isLogoutSuccessful) {
-      setShow(true);
-      setIsLogoutSuccessful(false);
-      if (logoutButtonRef.current) {
-        logoutButtonRef.current.focus();
-      }
-    }
-  }, [isLogoutSuccessful]);
+    setLoginFormValid(validateLogin());
+  }, [email, password]);
 
-  // Effect hook to focus on email input or continue button based on login status
   React.useEffect(() => {
-    if (emailInputRef.current && !isLoginSuccessful) {
+    if (showLoginForm) {
       emailInputRef.current.focus();
-    } else if (continueButtonRef.current && isLoginSuccessful) {
-      continueButtonRef.current.focus();
+    } else {
+      logoutButtonRef.current && logoutButtonRef.current.focus();
     }
-  }, [isLoginSuccessful]);
+  }, [showLoginForm]);
 
   return (
     <div>
       <Card
-        style={{ height: "100vh", width: "90vw", margin: "auto" }}
+        style={{ height: "95vh", width: "90vw", margin: "auto" }}
         bg="info"
         text="white"
       >
-        <Card.Header>
-          <h2>
-            {currentUser.loginStatus ? `Welcome ${currentUser.name}` : "Login"}
-          </h2>
-        </Card.Header>
         <Card.Body>
-          {currentUser.loginStatus ? (
-            <div>
-              <h4>What would you like to do today</h4>
-              <Row>
-                <Col className xs={9}>
-                  <ButtonToolbar justify="between">
-                    <Button
-                      className="mr-2 mb-2"
-                      ref={depositButtonRef}
-                      variant="light"
-                      onClick={handleDepositButtonClick}
-                      type="button"
-                    >
-                      Deposit
-                    </Button>
-
-                    <Button
-                      className="mr-2 mb-2"
-                      ref={withdrawButtonRef}
-                      variant="light"
-                      onClick={handleWithdrawButtonClick}
-                      type="button"
-                    >
-                      Withdraw
-                    </Button>
-
-                    <Button
-                      className="mr-2 mb-2"
-                      ref={transactionHistoryButtonRef}
-                      variant="light"
-                      onClick={handleTransactionHistoryButtonClick}
-                      type="button"
-                    >
-                      Transaction History
-                    </Button>
-                  </ButtonToolbar>
-                </Col>
-                <Col className="text-right" xs={3}>
-                  <Button
-                    ref={logoutButtonRef}
-                    variant="light"
-                    onClick={handleLogout}
-                    type="button"
-                  >
-                    Logout
-                  </Button>
-                </Col>
-              </Row>
-            </div>
-          ) : (
-            <Form onSubmit={handleSubmit}>
-              <Form.Group controlId="formBasicEmail">
+          <Card.Title>Login</Card.Title>
+          {showLoginForm ? (
+            <Form>
+              <Form.Group controlId="formEmail">
                 <Form.Control
-                  ref={emailInputRef}
-                  type="email"
-                  placeholder="Enter email"
+                  type="input"
+                  placeholder="Enter Email"
                   value={email}
                   onChange={(e) => setEmail(e.currentTarget.value)}
+                  ref={emailInputRef}
                 />
+                {email === "" && <p>Please enter your email</p>}
+                {email && !validateLoginEmail(email) && (
+                  <p>Please enter a valid email</p>
+                )}
               </Form.Group>
-              <br />
+              <br/>
               <Form.Group controlId="formBasicPassword">
                 <Form.Control
-                  ref={passwordInputRef}
                   type="password"
                   placeholder="Password"
                   value={password}
@@ -231,77 +147,127 @@ const Login = ({ setActiveKey }) => {
                 />
               </Form.Group>
               <br />
+              <Button
+                className="mr-2 mb-2"
+                variant="light"
+                type="submit"
+                onClick={handleLogin}
+                disabled={!loginFormValid}
+                ref={loginButtonRef}
+              >
+                Login
+              </Button>
+            </Form>
+          ) : (
+            <Form>
               <Row>
                 <Col xs={6}>
-                  <Button variant="light" type="submit" ref={continueButtonRef}>
-                    Login
-                  </Button>
+                  <h2 className="mb-2">Login Successful</h2>
+                  <br />
+                  <h1>Welcome {currentUser.name} to Bad Bank</h1>
                 </Col>
-                <Col xs={6} className="text-right">
+                <Col xs={6} className="text-right mt-3">
                   <Button
+                    ref={logoutButtonRef}
                     variant="light"
-                    type="button"
-                    onClick={forgottenPassword}
+                    onClick={handleLogout}
                   >
-                    Forgot email/password
+                    Logout
                   </Button>
                 </Col>
               </Row>
+              <div className="d-flex flex-column align-items-center">
+                <img
+                  src="bank.png"
+                  className="img-fluid"
+                  alt="responsive image"
+                />
+                <p
+                  className="text-muted"
+                  style={{
+                    fontSize: "0.7em",
+                    fontStyle: "italic",
+                    transform: "skewX(-10deg)",
+                  }}
+                >
+                  Welcome to Bad Bank, where we excel at being the epitome of
+                  badness in the banking world. Please be advised, while we
+                  strive to provide the worst banking experience possible, our
+                  commitment to terribleness knows no bounds. Here are some
+                  important reminders/ Customer Disservice: Our customer service
+                  representatives are trained to be as unhelpful and indifferent
+                  as possible. Expect long wait times, confusing responses, and
+                  a general sense of despair when contacting us./ Fee Frenzy:
+                  Prepare for a barrage of fees at every turn. From breathing
+                  too loudly near an ATM to daring to check your balance, we'll
+                  find a way to charge you for it. Remember, our motto is
+                  "nickel and dime until you're out of time."/ Security Theater:
+                  Rest assured, your security is of little concern to us. While
+                  we claim to take your privacy seriously, our security measures
+                  are about as effective as a paper umbrella in a hurricane.
+                  Feel free to share your PIN with strangers; it's not like
+                  we'll notice./ Interest Insanity: Our interest rates are as
+                  stable as a house of cards in a windstorm. Prepare for
+                  fluctuations that will leave you questioning the very fabric
+                  of reality. Just when you think you understand, we'll change
+                  the rules without warning. Fun, isn't it?/ Fineprint Follies:
+                  We've hidden more surprises in our terms and conditions than a
+                  mystery novel. Make sure to read every line with a magnifying
+                  glass and a lawyer on retainer. We take pride in our ability
+                  to make the simple act of banking feel like solving a Rubik's
+                  Cube blindfolded./ Remember, at Bad Bank, your dissatisfaction
+                  is our badge of honor. So buckle up and enjoy the ride into
+                  financial chaos!
+                </p>
+              </div>
             </Form>
           )}
         </Card.Body>
       </Card>
-      <footer
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          background: "dimGrey",
-          color: "white",
-        }}
-      >
-        <div className="d-flex justify-content-evenly">
-          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-            <a
-              href="http://www.linkedin.com/in/sean-mongey"
-              style={{ color: "white" }}
-            >
+
+      <footer className="fixed-bottom bg-dark text-white py-2">
+        <div className="container text-center">
+          <div className="row">
+            <div className="col">
+              <a
+                href="http://www.linkedin.com/in/sean-mongey"
+                className="text-white"
+              >
+                <img
+                  src="linkedin.png"
+                  alt="LinkedIn"
+                  className="me-1"
+                  style={{ maxWidth: "40px", maxHeight: "40px" }}
+                />
+                Sean Mongey
+              </a>
+            </div>
+            <div className="col">
+              <a
+                href="https://github.com/sean-mongey?tab=repositories"
+                className="text-white"
+              >
+                <img
+                  src="github.png"
+                  alt="GitHub"
+                  className="me-1"
+                  style={{ maxWidth: "50px", maxHeight: "50px" }}
+                />
+                sean-mongey.github.io
+              </a>
+            </div>
+            <div className="col">
+              Bad Bank
               <img
-                src="linkedin.png"
-                alt="LinkedIn"
-                style={{ maxWidth: "40px", maxHeight: "40px" }}
+                src="bank.png"
+                alt="Bank Logo"
+                className="ms-1"
+                style={{ maxWidth: "30px", maxHeight: "30px" }}
               />
-              Sean Mongey
-            </a>
-          </div>
-          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-            <a
-              href="https://github.com/sean-mongey?tab=repositories"
-              style={{ color: "white" }}
-            >
-              <img
-                src="github.png"
-                alt="GitHub"
-                style={{ maxWidth: "50px", maxHeight: "50px" }}
-              />
-              sean-mongey.github.io
-            </a>
-          </div>
-          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-            Bad Bank
-            <img
-              src="bank.png"
-              alt="Bank Logo"
-              style={{
-                maxWidth: "30px",
-                maxHeight: "30px",
-                marginLeft: "10px",
-              }}
-            />
+            </div>
           </div>
         </div>
       </footer>
     </div>
   );
 };
-window.Login = Login;
