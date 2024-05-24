@@ -116,7 +116,12 @@ const Login = () => {
   return (
     <div>
       <Card
-        style={{ height: "100vh", width: "90vw", margin: "auto" }}
+        style={{
+          height: "100vh",
+          width: "90vw",
+          margin: "auto",
+          paddingTop: "4em",
+        }}
         bg="info"
         text="white"
       >
@@ -148,28 +153,28 @@ const Login = () => {
               </Form.Group>
               <br />
               <Row>
-              <Col xs={6}>
-              <Button
-                className="mr-2 mb-2"
-                variant="light"
-                type="submit"
-                onClick={handleLogin}
-                disabled={!loginFormValid}
-                ref={loginButtonRef}
-              >
-                Login
-              </Button>
-              </Col>
-              <Col xs={6} className="text-right">
-                <Button
-                  variant="light"
-                  type="button"
-                  onClick={forgottenPassword}
-                >
-                  Forgot email/password
-                </Button>
-              </Col>
-            </Row>
+                <Col xs={6}>
+                  <Button
+                    className="mr-2 mb-2"
+                    variant="light"
+                    type="submit"
+                    onClick={handleLogin}
+                    disabled={!loginFormValid}
+                    ref={loginButtonRef}
+                  >
+                    Login
+                  </Button>
+                </Col>
+                <Col xs={6} className="text-right">
+                  <Button
+                    variant="light"
+                    type="button"
+                    onClick={forgottenPassword}
+                  >
+                    Forgot email/password
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           ) : (
             <Form>

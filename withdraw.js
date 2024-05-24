@@ -1,4 +1,3 @@
-
 const Withdraw = () => {
   const currentUser = React.useContext(currentUserContext);
   const ctx = React.useContext(UserContext);
@@ -75,7 +74,12 @@ const Withdraw = () => {
   return (
     <div>
       <Card
-        style={{ height: "100vh", width: "90vw", margin: "auto" }}
+        style={{
+          height: "100vh",
+          width: "90vw",
+          margin: "auto",
+          paddingTop: "4em",
+        }}
         bg="info"
         text="white"
       >
@@ -120,7 +124,9 @@ const Withdraw = () => {
               </Form>
             ) : (
               <>
-                <h2>Withdrawal of ${displayAmount(lastWithdrawAmount)} Successful</h2>
+                <h2>
+                  Withdrawal of ${displayAmount(lastWithdrawAmount)} Successful
+                </h2>
                 <br />
                 <h2>New Balance ${displayBalance()}</h2>
                 <Button

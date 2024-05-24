@@ -23,7 +23,9 @@ const Deposit = () => {
   const handleDeposit = () => {
     const user = ctx.users[currentUser.index];
     user.balance += Number(depositAmount);
-    user.accountHistory.push(`${getDate()} - Deposit of $${displayAmount(depositAmount)}`);
+    user.accountHistory.push(
+      `${getDate()} - Deposit of $${displayAmount(depositAmount)}`
+    );
     setLastDepositAmount(depositAmount);
     setDepositAmount("");
     setShowDepositForm(false);
@@ -46,7 +48,9 @@ const Deposit = () => {
   };
 
   const validateDeposit = () =>
-    depositAmount.trim() !== "" && validNumber(depositAmount) && aboveZero(depositAmount);
+    depositAmount.trim() !== "" &&
+    validNumber(depositAmount) &&
+    aboveZero(depositAmount);
 
   React.useEffect(() => {
     setDepositFormValid(validateDeposit());
@@ -63,7 +67,12 @@ const Deposit = () => {
   return (
     <div>
       <Card
-        style={{ height: "100vh", width: "90vw", margin: "auto" }}
+        style={{
+          height: "100vh",
+          width: "90vw",
+          margin: "auto",
+          paddingTop: "4em",
+        }}
         bg="info"
         text="white"
       >
@@ -84,8 +93,12 @@ const Deposit = () => {
                     placeholder="Enter Amount"
                   />
                   {depositAmount === "" && <p>Please enter an amount</p>}
-                  {depositAmount && !aboveZero(depositAmount) && <p>Amount must be greater than zero</p>}
-                  {depositAmount && !validNumber(depositAmount) && <p>Please enter a valid number</p>}
+                  {depositAmount && !aboveZero(depositAmount) && (
+                    <p>Amount must be greater than zero</p>
+                  )}
+                  {depositAmount && !validNumber(depositAmount) && (
+                    <p>Please enter a valid number</p>
+                  )}
                 </Form.Group>
 
                 <br />
@@ -101,7 +114,9 @@ const Deposit = () => {
               </Form>
             ) : (
               <>
-                <h2>Deposit of ${displayAmount(lastDepositAmount)} Successful</h2>
+                <h2>
+                  Deposit of ${displayAmount(lastDepositAmount)} Successful
+                </h2>
                 <br />
                 <h2>New Balance ${displayBalance()}</h2>
                 <Button
