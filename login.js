@@ -274,15 +274,23 @@ const Login = () => {
                 sean-mongey.github.io
               </a>
             </div>
-            <div className="col">
-              Bad Bank
-              <img
-                src="bank.png"
-                alt="Bank Logo"
-                className="ms-1"
-                style={{ maxWidth: "30px", maxHeight: "30px" }}
-              />
-            </div>
+            <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+          <a
+              href="https://github.com/sean-mongey/BadBank"
+              style={{ color: "white" }}
+          >
+            <img
+              src="bank.png"
+              alt="Bank Logo"
+              style={{
+                maxWidth: "30px",
+                maxHeight: "30px",
+                marginLeft: "10px",
+              }}
+            />
+            Bad Bank
+            </a>
+          </div>
           </div>
         </div>
       </footer>

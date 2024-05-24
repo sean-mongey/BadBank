@@ -136,15 +136,7 @@ const Deposit = () => {
           )}
         </Card.Body>
       </Card>
-      <footer
-        style={{
-          position: "fixed",
-          bottom: 0,
-          width: "100%",
-          background: "dimGrey",
-          color: "white",
-        }}
-      >
+      <footer className="fixed-bottom bg-dark text-white py-2">
         <div className="d-flex justify-content-evenly">
           <div className="flex-grow-1 d-flex justify-content-center align-items-center">
             <a
@@ -173,7 +165,10 @@ const Deposit = () => {
             </a>
           </div>
           <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-            Bad Bank
+          <a
+              href="https://github.com/sean-mongey/BadBank"
+              style={{ color: "white" }}
+          >
             <img
               src="bank.png"
               alt="Bank Logo"
@@ -183,6 +178,8 @@ const Deposit = () => {
                 marginLeft: "10px",
               }}
             />
+            Bad Bank
+            </a>
           </div>
         </div>
       </footer>
