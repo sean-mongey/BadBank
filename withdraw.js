@@ -1,3 +1,4 @@
+
 const Withdraw = () => {
   const currentUser = React.useContext(currentUserContext);
   const ctx = React.useContext(UserContext);
@@ -5,34 +6,28 @@ const Withdraw = () => {
   const [showWithdrawForm, setShowWithdrawForm] = React.useState(true);
   const [withdrawAmount, setWithdrawAmount] = React.useState("");
   const [withdrawFormValid, setWithdrawFormValid] = React.useState(false);
+  const [lastWithdrawAmount, setLastWithdrawAmount] = React.useState(null);
 
   const { Card, Button, Form } = ReactBootstrap;
 
   const continueButtonRef = React.useRef(null);
   const withdrawInputRef = React.useRef(null);
 
-  const getBalance = () => {
-    return ctx.users[currentUser.index].balance;
-  };
+  const getBalance = () => ctx.users[currentUser.index].balance;
 
   const displayBalance = () => getBalance().toLocaleString();
 
+  const displayAmount = (amount) => Number(amount).toLocaleString();
 
-  const displayAmount = () => {
-    const formattedAmount = Number(withdrawAmount);
-    return formattedAmount.toLocaleString();
-  };
-
-  const getDate = () => {
-    return new Date().toString();
-  };
+  const getDate = () => new Date().toString();
 
   const handleWithdrawal = () => {
     const user = ctx.users[currentUser.index];
-    user.balance -= withdrawAmount;
+    user.balance -= Number(withdrawAmount);
     user.accountHistory.push(
-      `${getDate()} - Withdrawal of $${displayAmount()}`
+      `${getDate()} - Withdrawal of $${displayAmount(withdrawAmount)}`
     );
+    setLastWithdrawAmount(withdrawAmount);
     setWithdrawAmount("");
     setShowWithdrawForm(false);
   };
@@ -48,7 +43,6 @@ const Withdraw = () => {
     if (!validNumber(withdrawAmount)) {
       return true; // Skip validation for non-number inputs
     }
-
     const numericAmount = Number(withdrawAmount);
     return numericAmount > 0;
   };
@@ -57,10 +51,8 @@ const Withdraw = () => {
     if (!validNumber(withdrawAmount)) {
       return true; // Skip validation for non-number inputs
     }
-  
     return Number(withdrawAmount) <= userBalance;
   };
-  
 
   const validateWithdrawal = () =>
     withdrawAmount.trim() !== "" &&
@@ -128,7 +120,7 @@ const Withdraw = () => {
               </Form>
             ) : (
               <>
-                <h2>Withdrawal Successful</h2>
+                <h2>Withdrawal of ${displayAmount(lastWithdrawAmount)} Successful</h2>
                 <br />
                 <h2>New Balance ${displayBalance()}</h2>
                 <Button

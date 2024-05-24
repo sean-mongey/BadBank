@@ -1,17 +1,15 @@
-
-
-function NavBar({activeKey, onSelect}) {
+function NavBar({ activeKey, onSelect }) {
   const { Navbar, Nav } = ReactBootstrap;
-  const { useLocation } = ReactRouterDOM;
-  const location = useLocation();
-  
+ 
 
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Navbar.Brand href="#">BadBank</Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarNav" />
       <Navbar.Collapse id="navbarNav">
-        <Nav className="mr-auto" activeKey={activeKey || `#${location.pathname}`} onSelect={onSelect}>
+        <Nav
+          className="mr-auto"
+                 >
           <Nav.Link href="#/CreateAccount/">Create Account</Nav.Link>
           <Nav.Link href="#/login/">Login</Nav.Link>
           <Nav.Link href="#/deposit/">Deposit</Nav.Link>

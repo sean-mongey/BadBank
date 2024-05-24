@@ -137,7 +137,7 @@ const Login = () => {
                   <p>Please enter a valid email</p>
                 )}
               </Form.Group>
-              <br/>
+              <br />
               <Form.Group controlId="formBasicPassword">
                 <Form.Control
                   type="password"
@@ -147,16 +147,29 @@ const Login = () => {
                 />
               </Form.Group>
               <br />
-              <Button
-                className="mr-2 mb-2"
-                variant="light"
-                type="submit"
-                onClick={handleLogin}
-                disabled={!loginFormValid}
-                ref={loginButtonRef}
-              >
-                Login
-              </Button>
+              <Row>
+                <Col xs={6}>
+                  <Button
+                    className="mr-2 mb-2"
+                    variant="light"
+                    type="submit"
+                    onClick={handleLogin}
+                    disabled={!loginFormValid}
+                    ref={loginButtonRef}
+                  >
+                    Login
+                  </Button>
+                </Col>
+                <Col xs={6} className="text-right">
+                  <Button
+                    variant="light"
+                    type="button"
+                    onClick={forgottenPassword}
+                  >
+                    Forgot email/password
+                  </Button>
+                </Col>
+              </Row>
             </Form>
           ) : (
             <Form>

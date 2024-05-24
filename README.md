@@ -9,22 +9,27 @@ Check out the live version of the app here: [Bad Bank App](https://sean-mongey-b
 ## Features
 
 ### 1. Account Creation
+
 - Users can create a new account by providing their name, email, and password.
 - Input fields are validated to ensure correct data entry.
 
 ### 2. Login
+
 - Existing users can log in with their email and password.
 - Authentication ensures secure access to user accounts.
 
 ### 3. Deposit
+
 - Logged-in users can deposit money into their accounts.
 - Real-time balance updates are displayed upon successful deposits.
 
 ### 4. Withdrawal
+
 - Users can withdraw money from their accounts, provided they have sufficient balance.
 - Withdrawal transactions are recorded in the user's transaction history.
 
 ### 5. Transaction History
+
 - Users can view their transaction history, including deposits and withdrawals.
 - Transactions are displayed with timestamps and categorized by type.
 
@@ -139,3 +144,4 @@ aws s3 sync . s3://bad-bank-app-bucket/
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
