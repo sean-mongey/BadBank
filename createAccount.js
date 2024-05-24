@@ -106,7 +106,7 @@ const CreateAccount = () => {
   return (
     <div>
       <Card
-        style={{ height: "95vh", width: "90vw", margin: "auto" }}
+        style={{ height: "100vh", width: "90vw", margin: "auto" }}
         bg="info"
         text="white"
       >
