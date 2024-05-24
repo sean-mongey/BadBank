@@ -33,9 +33,7 @@ function TransactionHistory() {
         text="white"
       >
         <Row>
-          <Col xs={6}>
-            <Card.Header>Transaction History</Card.Header>
-          </Col>
+          <Col xs={6}></Col>
           <Col xs={6}>
             <DropdownButton
               className="d-flex flex-column align-items-right"
@@ -57,10 +55,10 @@ function TransactionHistory() {
               <div>
                 <Row>
                   <Col xs={8}>
-                    <h5 style={{ marginBottom: "20px" }}>
+                    <h2 style={{ marginBottom: "20px" }}>
                       Transaction History for:{" "}
                       {ctx.users[currentUser.index].name}
-                    </h5>
+                    </h2>
                     <div
                       style={{
                         maxHeight: "80vh",

@@ -76,11 +76,11 @@ const Deposit = () => {
         bg="info"
         text="white"
       >
-        <Card.Title>Deposit Money</Card.Title>
         <Card.Body>
           {currentUser.loginStatus ? (
             showDepositForm ? (
               <Form>
+                <h2>Deposit</h2>
                 <h1>Balance: ${displayBalance()}</h1>
                 <Form.Group controlId="formAmount">
                   <Form.Label>Amount</Form.Label>

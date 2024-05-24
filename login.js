@@ -126,9 +126,9 @@ const Login = () => {
         text="white"
       >
         <Card.Body>
-          <Card.Title>Login</Card.Title>
           {showLoginForm ? (
             <Form>
+              <h2>Login</h2>
               <Form.Group controlId="formEmail">
                 <Form.Control
                   type="input"

@@ -16,7 +16,7 @@ const CreateAccount = () => {
   const nameRef = React.useRef(null);
 
   const createButtonRef = React.useRef(null);
-  const loginButtonRef = React.useRef(null);
+  // const loginButtonRef = React.useRef(null);
   const createAnotherButtonRef = React.useRef(null);
 
   const capitalise = (string) =>
@@ -73,9 +73,9 @@ const CreateAccount = () => {
     logoutCurrentUser("", "", "", 0, 0, false);
   };
 
-  const handleLoginButtonClick = () => {
-    history.push("/login");
-  };
+  // const handleLoginButtonClick = () => {
+  //   history.push("/login");
+  // };
 
   const validateName = (name) => /^[A-Za-z\s]+$/.test(name);
 
@@ -99,7 +99,7 @@ const CreateAccount = () => {
     if (showCreateForm) {
       nameRef.current && nameRef.current.focus();
     } else {
-      loginButtonRef.current && loginButtonRef.current.focus();
+      createAnotherButtonRef.current && createAnotherButtonRef.current.focus();
     }
   }, [showCreateForm]);
 
@@ -116,9 +116,10 @@ const CreateAccount = () => {
         text="white"
       >
         <Card.Body>
-          <Card.Title>Create Account</Card.Title>
+        
           {showCreateForm ? (
             <Form>
+                <h2>Create Account</h2>
               <Form.Group controlId="formName">
                 <Form.Label>Name</Form.Label>
                 <Form.Control
@@ -173,19 +174,13 @@ const CreateAccount = () => {
             </Form>
           ) : (
             <Form>
-              <h5>Account Created Successfully</h5>
-              <Row>
-                <Col xs={6}>
-                  <Button
-                    className="mr-2 mb-2"
-                    variant="light"
-                    onClick={handleLoginButtonClick}
-                    ref={loginButtonRef}
-                  >
-                    Login
-                  </Button>
+                       <Row>
+                <Col xs={9}>
+                  <h2>Congradulations {capitalise(name)}!!! You have Successfully opened an account with us at Bad Bank.</h2>
+                  <br/>
+                  <p>Our deepest condolences</p>
                 </Col>
-                <Col xs={6} className="mb-2 text-right">
+                <Col xs={3} className="mb-2 text-right">
                   <Button
                     variant="light"
                     onClick={clearCreateForm}

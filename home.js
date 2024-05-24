@@ -12,7 +12,7 @@ function Home() {
         bg="info"
         text="white"
       >
-        <Card.Header>Bad Bank</Card.Header>
+     
         <Card.Body>
           <Card.Title>Welcome to the Bad Bank!</Card.Title>
 

@@ -83,11 +83,11 @@ const Withdraw = () => {
         bg="info"
         text="white"
       >
-        <Card.Title>Withdraw Money</Card.Title>
         <Card.Body>
           {currentUser.loginStatus ? (
             showWithdrawForm ? (
               <Form>
+                <h2>Withdraw</h2>
                 <h1>Balance: ${displayBalance()}</h1>
                 <Form.Group controlId="formAmount">
                   <Form.Label>Amount</Form.Label>
