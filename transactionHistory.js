@@ -115,6 +115,7 @@ function TransactionHistory() {
             </>
           ) : (
             <div>
+              <h3>Who's money are you trying to keep tabs on?</h3>
               <h2>LOGIN TO USE FEATURE</h2>
             </div>
           )}
