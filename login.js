@@ -238,53 +238,49 @@ const Login = () => {
       </Card>
 
       <footer className="fixed-bottom bg-dark text-white py-2">
-        <div className="container text-center">
-          <div className="row">
-            <div className="col">
-              <a
-                href="http://www.linkedin.com/in/sean-mongey"
-                className="text-white"
-              >
-                <img
-                  src="linkedin.png"
-                  alt="LinkedIn"
-                  className="me-1"
-                  style={{ maxWidth: "40px", maxHeight: "40px" }}
-                />
-                Sean Mongey
-              </a>
-            </div>
-            <div className="col">
-              <a
-                href="https://github.com/sean-mongey?tab=repositories"
-                className="text-white"
-              >
-                <img
-                  src="github.png"
-                  alt="GitHub"
-                  className="me-1"
-                  style={{ maxWidth: "50px", maxHeight: "50px" }}
-                />
-                sean-mongey.github.io
-              </a>
-            </div>
-            <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-              <a
-                href="https://github.com/sean-mongey/BadBank"
-                style={{ color: "white" }}
-              >
-                <img
-                  src="bank.png"
-                  alt="Bank Logo"
-                  style={{
-                    maxWidth: "30px",
-                    maxHeight: "30px",
-                    marginLeft: "10px",
-                  }}
-                />
-                Bad Bank
-              </a>
-            </div>
+        <div className="d-flex justify-content-evenly">
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+            <a
+              href="http://www.linkedin.com/in/sean-mongey"
+              style={{ color: "white" }}
+            >
+              <img
+                src="linkedin.png"
+                alt="LinkedIn"
+                style={{ maxWidth: "40px", maxHeight: "40px" }}
+              />
+              Sean Mongey
+            </a>
+          </div>
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+            <a
+              href="https://github.com/sean-mongey?tab=repositories"
+              style={{ color: "white" }}
+            >
+              <img
+                src="github.png"
+                alt="GitHub"
+                style={{ maxWidth: "50px", maxHeight: "50px" }}
+              />
+              sean-mongey.github.io
+            </a>
+          </div>
+          <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+          <a
+              href="https://github.com/sean-mongey/BadBank"
+              style={{ color: "white" }}
+          >
+            <img
+              src="bank.png"
+              alt="Bank Logo"
+              style={{
+                maxWidth: "30px",
+                maxHeight: "30px",
+                marginLeft: "10px",
+              }}
+            />
+            Bad Bank
+            </a>
           </div>
         </div>
       </footer>
