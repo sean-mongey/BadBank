@@ -130,7 +130,7 @@ const Deposit = () => {
             )
           ) : (
             <div>
-              <h3>Where ya tryin to stach dat loot?</h3>
+              <h3>Where are ya tryin to stash dat loot?</h3>
               <h2>LOGIN TO USE THIS FEATURE</h2>
             </div>
           )}
