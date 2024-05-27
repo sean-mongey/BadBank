@@ -1,7 +1,4 @@
 const CreateAccount = () => {
-  const { useHistory } = ReactRouterDOM;
-  const history = useHistory();
-
   const ctx = React.useContext(UserContext);
   const currentUser = React.useContext(currentUserContext);
 
@@ -16,7 +13,6 @@ const CreateAccount = () => {
   const nameRef = React.useRef(null);
 
   const createButtonRef = React.useRef(null);
-  // const loginButtonRef = React.useRef(null);
   const createAnotherButtonRef = React.useRef(null);
 
   const capitalise = (string) =>
@@ -73,9 +69,6 @@ const CreateAccount = () => {
     logoutCurrentUser("", "", "", 0, 0, false);
   };
 
-  // const handleLoginButtonClick = () => {
-  //   history.push("/login");
-  // };
 
   const validateName = (name) => /^[A-Za-z\s]+$/.test(name);
 
@@ -106,11 +99,10 @@ const CreateAccount = () => {
   return (
     <div>
       <Card
-        style={{
+         style={{
           height: "100vh",
           width: "90vw",
           margin: "auto",
-          paddingTop: "4em",
         }}
         bg="info"
         text="white"

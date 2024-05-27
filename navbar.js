@@ -2,7 +2,7 @@ function NavBar() {
   const { Navbar, Nav } = ReactBootstrap;
 
   return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
+    <Navbar bg="dark" variant="dark" expand="lg">
       <Navbar.Brand href="#">BadBank</Navbar.Brand>
       <Navbar.Toggle aria-controls="navbarNav" />
       <Navbar.Collapse id="navbarNav">

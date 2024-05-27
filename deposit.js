@@ -67,11 +67,10 @@ const Deposit = () => {
   return (
     <div>
       <Card
-        style={{
+         style={{
           height: "100vh",
           width: "90vw",
           margin: "auto",
-          paddingTop: "4em",
         }}
         bg="info"
         text="white"
@@ -131,7 +130,8 @@ const Deposit = () => {
             )
           ) : (
             <div>
-              <h2>LOGIN TO USE FEATURE</h2>
+              <h3>Where are you trying to put that money?</h3>
+              <h2>LOGIN TO USE THIS FEATURE</h2>
             </div>
           )}
         </Card.Body>

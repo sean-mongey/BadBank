@@ -74,11 +74,10 @@ const Withdraw = () => {
   return (
     <div>
       <Card
-        style={{
+         style={{
           height: "100vh",
           width: "90vw",
           margin: "auto",
-          paddingTop: "4em",
         }}
         bg="info"
         text="white"
@@ -141,7 +140,8 @@ const Withdraw = () => {
             )
           ) : (
             <div>
-              <h2>LOGIN TO USE FEATURE</h2>
+              <h3>This isn't a free cash givaway!</h3>
+              <h2>LOGIN TO USE THIS FEATURE</h2>
             </div>
           )}
         </Card.Body>
@@ -175,20 +175,20 @@ const Withdraw = () => {
             </a>
           </div>
           <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-          <a
+            <a
               href="https://github.com/sean-mongey/BadBank"
               style={{ color: "white" }}
-          >
-            <img
-              src="bank.png"
-              alt="Bank Logo"
-              style={{
-                maxWidth: "30px",
-                maxHeight: "30px",
-                marginLeft: "10px",
-              }}
-            />
-            Bad Bank
+            >
+              <img
+                src="bank.png"
+                alt="Bank Logo"
+                style={{
+                  maxWidth: "30px",
+                  maxHeight: "30px",
+                  marginLeft: "10px",
+                }}
+              />
+              Bad Bank
             </a>
           </div>
         </div>

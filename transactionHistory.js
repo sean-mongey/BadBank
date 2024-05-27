@@ -23,11 +23,10 @@ function TransactionHistory() {
   return (
     <div>
       <Card
-        style={{
+         style={{
           height: "100vh",
           width: "90vw",
           margin: "auto",
-          paddingTop: "4em",
         }}
         bg="info"
         text="white"

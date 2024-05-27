@@ -43,6 +43,12 @@ const Login = () => {
     currentUser.loginStatus = loginStatus;
   };
 
+  const clearForm = () => {
+    setEmail("");
+    setPassword("");
+    setShowLoginForm(true);
+  };
+
   const userLogin = () => {
     const user = getUser();
     if (user.length > 0) {
@@ -68,13 +74,7 @@ const Login = () => {
     }
   };
 
-  const clearForm = () => {
-    setEmail("");
-    setPassword("");
-    setShowLoginForm(true);
-  };
-
-  const handleLogout = () => {
+  const userLogout = () => {
     updateCurrentUser("", "", "", 0, 0, false);
     clearForm();
   };
@@ -89,11 +89,6 @@ const Login = () => {
     );
     alert("Surely you wrote them down somewhere...");
     alert("Maybe check under the bed...?");
-  };
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    userLogin();
   };
 
   const validateLoginEmail = (email) => /\S+@\S+\.\S+/.test(email);
@@ -120,7 +115,6 @@ const Login = () => {
           height: "100vh",
           width: "90vw",
           margin: "auto",
-          paddingTop: "4em",
         }}
         bg="info"
         text="white"
@@ -158,7 +152,7 @@ const Login = () => {
                     className="mr-2 mb-2"
                     variant="light"
                     type="submit"
-                    onClick={handleLogin}
+                    onClick={userLogin}
                     disabled={!loginFormValid}
                     ref={loginButtonRef}
                   >
@@ -188,7 +182,7 @@ const Login = () => {
                   <Button
                     ref={logoutButtonRef}
                     variant="light"
-                    onClick={handleLogout}
+                    onClick={userLogout}
                   >
                     Logout
                   </Button>
@@ -275,22 +269,22 @@ const Login = () => {
               </a>
             </div>
             <div className="flex-grow-1 d-flex justify-content-center align-items-center">
-          <a
-              href="https://github.com/sean-mongey/BadBank"
-              style={{ color: "white" }}
-          >
-            <img
-              src="bank.png"
-              alt="Bank Logo"
-              style={{
-                maxWidth: "30px",
-                maxHeight: "30px",
-                marginLeft: "10px",
-              }}
-            />
-            Bad Bank
-            </a>
-          </div>
+              <a
+                href="https://github.com/sean-mongey/BadBank"
+                style={{ color: "white" }}
+              >
+                <img
+                  src="bank.png"
+                  alt="Bank Logo"
+                  style={{
+                    maxWidth: "30px",
+                    maxHeight: "30px",
+                    marginLeft: "10px",
+                  }}
+                />
+                Bad Bank
+              </a>
+            </div>
           </div>
         </div>
       </footer>
