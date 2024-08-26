@@ -1,139 +1,147 @@
-# Bad Bank
+# Bad Bank MIT xPro
 
-## Project Overview
+This project is a part of the MIT xPro Professional Certificate in Coding: Full Stack Development with MERN. It is a web application called "Bad Bank" that simulates basic banking functionalities such as account creation, login, deposit, withdrawal, and transaction history viewing.
 
-Bad Bank is the capstone project for the MIT xPro Professional Certificate in Coding: Full Stack Development with MERN. It is a web application that simulates basic banking functionalities, including account creation, login, deposits, withdrawals, transfers, transaction history and an admin overview.
+## Live Demo
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [File Structure](#file-structure)
-- [Setup Instructions](#setup-instructions)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
+Check out the live version of the app here: [Bad Bank App](https://sean-mongey-bad-bank.s3.us-east-2.amazonaws.com/index.html#/)
 
 ## Features
 
-- **Account Management**: Create and manage user accounts.
-- **Authentication**: Login and logout functionality.
-- **Transactions**: Deposit and withdraw money.
-- **Transfer**: Transfer funds between accounts.
-- **Transaction History**: View transaction history.
-- **Admin Access**: Admins can view all user data.
+### 1. Account Creation
 
-## Tech Stack
+- Users can create a new account by providing their name, email, and password.
+- Input fields are validated to ensure correct data entry.
 
-### Frontend
-- React.js
-- React Bootstrap
-- React Router
+### 2. Login
 
-### Backend
-- Node.js
-- Express.js
-- Firebase (Firestore)
+- Existing users can log in with their email and password.
+- Authentication ensures secure access to user accounts.
 
-### Tools
-- Babel
-- Webpack
-- Jest (for testing)
+### 3. Deposit
 
-## File Structure
+- Logged-in users can deposit money into their accounts.
+- Real-time balance updates are displayed upon successful deposits.
 
-Bad Bank/
-│
-├── client/
-│ ├── public/
-│ │ ├── index.html
-│ │ ├── bank.png
-│ │ ├── github.png
-│ │ └── linkedIn.png
-│ ├── src/
-│ │ ├── components/
-│ │ │ ├── context.js
-│ │ │ ├── footer.js
-│ │ │ ├── navbar.js
-│ │ │ ├── transactionTools.js
-│ │ │ ├── useTransactionState.js
-│ │ │ └── validation.js
-│ │ ├── pages/
-│ │ │ ├── allData.js
-│ │ │ ├── createAccount.js
-│ │ │ ├── deposit.js
-│ │ │ ├── home.js
-│ │ │ ├── login.js
-│ │ │ ├── transactionHistory.js
-│ │ │ ├── transfer.js
-│ │ │ ├── userTransactions.js
-│ │ │ └── withdraw.js
-│ │ ├── App.js
-│ │ ├── index.js
-│ │ └── babel.config.json
-│ ├── package.json
-│ └── package-lock.json
-│
-├── server/
-│ ├── dal.js
-│ ├── database_test.js
-│ ├── firebase.js
-│ ├── index.js
-│ ├── package.json
-│ └── package-lock.json
-│
-└── README.md
+### 4. Withdrawal
 
+- Users can withdraw money from their accounts, provided they have sufficient balance.
+- Withdrawal transactions are recorded in the user's transaction history.
+
+### 5. Transaction History
+
+- Users can view their transaction history, including deposits and withdrawals.
+- Transactions are displayed with timestamps and categorized by type.
+
+## Technologies Used
+
+- **Frontend**: React.js, React Router, React Bootstrap
+- **Backend**: Node.js (not included in this project)
+- **Routing**: React Router DOM for client-side routing
+- **State Management**: React Context API for managing user data and authentication
+- **Styling**: Bootstrap CSS for styling components
+- **Date Handling**: JavaScript Date objects for timestamping transactions
+
+## Prerequisites
+
+1. **Node.js and npm**: Make sure Node.js and npm are installed on your machine. You can download and install them from [nodejs.org](https://nodejs.org/).
+2. **AWS Account**: Sign up for an AWS account at [aws.amazon.com](https://aws.amazon.com/).
+3. **AWS CLI**: Install the AWS Command Line Interface (CLI). Follow the instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 
 ## Setup Instructions
 
-1. **Clone the repository:**
+1. Clone the repository to your local machine.
+2. Install dependencies using `npm install`.
+3. Run the application using `npm start`.
+4. Access the application in your web browser at `http://localhost:3000`.
 
-   ```bash
-   git clone https://github.com/yourusername/badbank.git
-   cd badbank
+## Uploading bad-bank App to Amazon S3
 
-2. **Install dependencies:**
+This guide will walk you through the process of uploading your bad-bank app to an Amazon S3 bucket.
 
-  Navigate to the root directory and install the dependencies for both client and server
-  
-  npm install
-cd client && npm install
-cd ../server && npm install
+### Steps
 
-3. **Configure Firebase:**
+1. **Create an S3 Bucket**
 
-Ensure that your Firebase project configuration matches the details in firebase.js.
+   - Sign in to the [AWS Management Console](https://aws.amazon.com/console/).
+   - Navigate to the **S3** service.
+   - Click on **Create bucket**.
+   - Enter a unique bucket name (e.g., `bad-bank-app-bucket`).
+   - Choose the AWS Region closest to your users.
+   - Keep the default settings or configure them as per your requirements.
+   - Click on **Create bucket**.
 
-4. **Start the application:**
+2. **Configure the Bucket for Static Website Hosting**
 
-You can run both the server and client using the following command:
+   - Go to the bucket you just created.
+   - Click on the **Properties** tab.
+   - Scroll down to the **Static website hosting** section.
+   - Choose **Enable**.
+   - For the **Index document**, enter `index.html`.
+   - For the **Error document**, enter `error.html` (if you have one).
+   - Note the **Bucket website endpoint** URL; this will be the URL for your app.
+   - Click **Save changes**.
 
-npm run dev
+3. **Set Bucket Permissions**
 
-This will concurrently start the client and server.
+   - Click on the **Permissions** tab of your bucket.
+   - In the **Bucket Policy** section, click on **Edit**.
+   - Add the following bucket policy to allow public read access to your bucket:
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Principal": "*",
+           "Action": "s3:GetObject",
+           "Resource": "arn:aws:s3:::bad-bank-app-bucket/*"
+         }
+       ]
+     }
+     ```
+   - Replace `bad-bank-app-bucket` with your bucket name.
+   - Click **Save changes**.
 
-Usage
-Account Creation: Navigate to the Create Account page to register a new user.
-Login: Use the Login page to access your account.
-Transactions: Perform deposits and withdrawals on the respective pages.
-Transfer: Use the Transfer page to send funds to another user.
-Transaction History: View your transaction history under Transaction History.
-Admin Access: Admins can access all user data through the All Data page.
-API Endpoints
-Create Account: /account/create/:name/:email/:password
-Login: /account/login/:email/:password
-Find User: /account/find/:email
-Update Balance (Deposit/Withdraw): /account/update/:email/:amount
-Get Balance: /account/balance/:email
-Get All Accounts: /account/all
-Transaction History: /account/transactions/:email
-Transfer Money: /account/transfer/:senderEmail/:recipientEmail/:amount
-Contributing
-Contributions are welcome! Please fork this repository and submit a pull request.
+4. **Install AWS CLI and Configure It**
+
+   - Open your terminal or command prompt.
+   - Run the following command to configure the AWS CLI with your credentials:
+     ```sh
+     aws configure
+     ```
+   - Enter your AWS Access Key ID, Secret Access Key, default region name, and default output format (e.g., `json`) when prompted.
+
+5. **Upload Your App to S3**
+
+   - Navigate to the directory containing your bad-bank app files.
+   - Run the following command to sync your local files to the S3 bucket:
+     ```sh
+     aws s3 sync . s3://bad-bank-app-bucket/
+     ```
+   - Replace `bad-bank-app-bucket` with your bucket name.
+
+6. **Access Your App**
+
+   - Open a web browser.
+   - Navigate to the **Bucket website endpoint** URL you noted earlier.
+   - Your bad-bank app should now be live and accessible.
+
+### Example
+
+```sh
+aws s3 sync . s3://bad-bank-app-bucket/
+
+### Notes
+
+- Ensure all your files, especially `index.html`, are correctly uploaded to the S3 bucket.
+- If you make updates to your app, re-run the `aws s3 sync` command to upload the latest changes.
+
+## Contributors
+
+- Sean Mongey
 
 ## License
-This project is licensed under the MIT License.
-# BadBankFullStack
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```
